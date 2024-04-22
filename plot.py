@@ -85,16 +85,12 @@ for feature in features:
                 
                 plt.plot(center[0], center[1], "y^")
 
-points = np.array([
-    [135.377,35.220],
-    [129.770,38.506],
-    [135.768,35.039],
-    [139.691,35.689],
-    [140.102,36.104],
-    [141.102,36.104],
-    [142.102,36.104],
-    [143.102,36.104],
-])
+points = []
+
+random_seeds = np.random.rand(100, 2)
+for seed in random_seeds:
+    point = [120 + (30 * seed[0]), 25 + (20 * seed[1])]
+    points.append(point)
 
 cnt = 0
 
@@ -102,6 +98,7 @@ for point in points:
     flag = False
     min_distance = 100000000
     min_distance_prefecture = ""
+    min_distance_center = []
     
     for polygon_index, polygon, properties, center in prefectures:
         if are_points_inside_polygon_index(point, polygon_index):
@@ -114,11 +111,14 @@ for point in points:
             if min_distance > distance:
                 min_distance = distance
                 min_distance_prefecture = properties['name'] + u"付近"
+                min_distance_center = center
     if flag:
         print str(properties['name'].encode('utf-8')).decode('utf-8')
+        
         plt.plot(point[0], point[1], "ro")
     else:
         print str(min_distance_prefecture.encode('utf-8')).decode('utf-8')
+        plt.plot([point[0], min_distance_center[0]], [point[1], min_distance_center[1]], "y-")
         plt.plot(point[0], point[1], "go")
 
 plt.legend()
